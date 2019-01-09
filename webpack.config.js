@@ -73,6 +73,7 @@ const config = {
 
 if (isDev) {
     config.devtool = '#cheap-module-eval-source-map',
+    // config.devtools = true
     config.devServer = {
         port: 8000,
         host: '0.0.0.0',
@@ -85,6 +86,30 @@ if (isDev) {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
     )
+}else{
+    // config.entry = {
+    //     app: path.join(__dirname, 'src/index.js'),
+    //     vendor: ['vue']
+    // }
+    config.optimization = {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    // name: "vendor",
+                    chunks: "initial",
+                    minChunks: 2
+                },
+                vendor: {
+                    test: /node_modules/,
+                    chunks: 'initial',
+                    name: 'vendor',
+                    priority: 10,
+                    enforce: true
+
+                }
+            }
+        },
+    }
 }
 
 module.exports = config
